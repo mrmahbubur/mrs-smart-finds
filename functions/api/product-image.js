@@ -1,6 +1,29 @@
 const ALLOWED_HOSTS = new Set(["startech.com.bd","www.startech.com.bd","shopz.com.bd","www.shopz.com.bd","releva.com.bd","www.releva.com.bd","illin.com.bd","www.illin.com.bd"]);
 function attrs(tag){const out={};for(const m of tag.matchAll(/([a-zA-Z_:][-a-zA-Z0-9_:]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g))out[m[1].toLowerCase()]=m[2]??m[3]??m[4]??"";return out}
-function getImage(html,base){for(const m of html.matchAll(/<meta\b[^>]*>/gi)){const a=attrs(m[0]);const key=(a.property||a.name||"").toLowerCase();if(["og:image","og:image:secure_url","twitter:image","twitter:image:src"].includes(key)&&a.content){try{const u=new URL(a.content.replace(/&amp;/g,"&"),base);if(["https:","http:"].includes(u.protocol))return u.href}catch{}}}return null}
+function getImage(html,base){
+  const candidates=[];
+  for(const m of html.matchAll(/<meta\\b[^>]*>/gi)){
+    const x=attrs(m[0]);const key=(x.property||x.name||"").toLowerCase();
+    if(["og:image","og:image:secure_url","twitter:image","twitter:image:src"].includes(key)&&x.content)candidates.push(x.content);
+  }
+  for(const m of html.matchAll(/<img\\b[^>]*>/gi)){
+    const x=attrs(m[0]);const alt=(x.alt||"").toLowerCase();
+    const src=x["data-src"]||x["data-lazy-src"]||x["data-original"]||x.srcset?.split(",")[0]?.trim().split(/\\s+/)[0]||x.src;
+    if(!src||/logo|banner|icon|avatar|payment|placeholder|spinner/i.test(alt+" "+src))continue;
+    candidates.push(src);
+  }
+  const seen=new Set();
+  for(const raw of candidates){
+    try{
+      const u=new URL(raw.replace(/&amp;/g,"&"),base);
+      if(!["https:","http:"].includes(u.protocol)||seen.has(u.href))continue;
+      seen.add(u.href);
+      if(/\\.(?:svg|gif)(?:[?#]|$)/i.test(u.href))continue;
+      return u.href;
+    }catch{}
+  }
+  return null;
+}
 export async function onRequestGet({request}) {
   const incoming=new URL(request.url), raw=incoming.searchParams.get("url");
   if(!raw)return new Response("Missing product URL",{status:400});
