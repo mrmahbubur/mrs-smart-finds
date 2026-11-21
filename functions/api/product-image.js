@@ -2,13 +2,13 @@ const ALLOWED_HOSTS = new Set(["startech.com.bd","www.startech.com.bd","shopz.co
 function attrs(tag){const out={};for(const m of tag.matchAll(/([a-zA-Z_:][-a-zA-Z0-9_:]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g))out[m[1].toLowerCase()]=m[2]??m[3]??m[4]??"";return out}
 function getImage(html,base){
   const candidates=[];
-  for(const m of html.matchAll(/<meta\\b[^>]*>/gi)){
+  for(const m of html.matchAll(/<meta\b[^>]*>/gi)){
     const x=attrs(m[0]);const key=(x.property||x.name||"").toLowerCase();
     if(["og:image","og:image:secure_url","twitter:image","twitter:image:src"].includes(key)&&x.content)candidates.push(x.content);
   }
-  for(const m of html.matchAll(/<img\\b[^>]*>/gi)){
+  for(const m of html.matchAll(/<img\b[^>]*>/gi)){
     const x=attrs(m[0]);const alt=(x.alt||"").toLowerCase();
-    const src=x["data-src"]||x["data-lazy-src"]||x["data-original"]||x.srcset?.split(",")[0]?.trim().split(/\\s+/)[0]||x.src;
+    const src=x["data-src"]||x["data-lazy-src"]||x["data-original"]||x.srcset?.split(",")[0]?.trim().split(/\s+/)[0]||x.src;
     if(!src||/logo|banner|icon|avatar|payment|placeholder|spinner/i.test(alt+" "+src))continue;
     candidates.push(src);
   }
@@ -18,7 +18,7 @@ function getImage(html,base){
       const u=new URL(raw.replace(/&amp;/g,"&"),base);
       if(!["https:","http:"].includes(u.protocol)||seen.has(u.href))continue;
       seen.add(u.href);
-      if(/\\.(?:svg|gif)(?:[?#]|$)/i.test(u.href))continue;
+      if(/\.(?:svg|gif)(?:[?#]|$)/i.test(u.href))continue;
       return u.href;
     }catch{}
   }
