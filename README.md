@@ -1,25 +1,32 @@
 # MRS Smart Finds
 
-A lightweight, responsive static affiliate product-discovery website.
+A responsive affiliate product-discovery website with a Node.js backend for retailer image and price lookups.
 
-## Cloudflare Pages deployment
+## Deploy on Render (Web Service)
 
-Connect this repository to Cloudflare Pages with Git integration:
+Connect this GitHub repository to Render and use:
 
-- Production branch: `main`
-- Framework preset: `None`
-- Build command: leave blank
-- Build output directory: `/` (repository root)
-- Root directory: `/`
+- **Service type:** Web Service
+- **Runtime:** Node
+- **Branch:** `main`
+- **Root directory:** leave blank
+- **Build command:** `npm install`
+- **Start command:** `npm start`
+- **Instance type:** Free, if available in your Render account
 
-Cloudflare Pages will deploy the static site from `index.html` after each commit to the production branch.
+Render provides the `PORT` environment variable. The server listens on `0.0.0.0` and serves the website plus API routes.
 
-## Editing
+## API routes
 
-Update `index.html` and commit the change to `main`. Cloudflare Pages will automatically start a new deployment.
+- `/api/product-image?url=...` — looks for a product image on an approved retailer listing and redirects to it.
+- `/api/product-price?url=...` — reads structured product price metadata and returns the amount and currency when available.
+- `/health` — health check.
 
-## Important
+Supported retailer hosts: Amazon, Star Tech, ShopZ, Releva and Illin (including their www hostnames).
 
-- Retailers control product prices, stock, delivery, returns and fulfilment.
+## Notes
+
+- Retailers can block automated requests or omit structured price/image metadata. In those cases, the page shows an unavailable state; it does not invent prices or product photos.
+- Retailers control prices, stock, delivery, returns and fulfilment. Confirm details on the retailer's current listing before purchasing.
 - Affiliate links are disclosed on the website.
-- Confirm all product details and availability on the retailer's current listing before purchasing.
+- Node.js 20 or newer is required.
