@@ -2,31 +2,26 @@
 
 A responsive affiliate product-discovery website with a Node.js backend for retailer image and price lookups.
 
-## Deploy on Render (Web Service)
+## Render Web Service deployment
 
-Connect this GitHub repository to Render and use:
+Connect this repository to Render and configure:
 
-- **Service type:** Web Service
-- **Runtime:** Node
-- **Branch:** `main`
-- **Root directory:** leave blank
-- **Build command:** `npm install`
-- **Start command:** `npm start`
-- **Instance type:** Free, if available in your Render account
+- Service type: Web Service
+- Runtime: Node
+- Branch: `main`
+- Root directory: blank
+- Build command: `npm install`
+- Start command: `npm start`
+- Instance: Free, if available in your Render account
 
-Render provides the `PORT` environment variable. The server listens on `0.0.0.0` and serves the website plus API routes.
+Render supplies `PORT`; the server listens on `0.0.0.0`.
 
 ## API routes
 
-- `/api/product-image?url=...` — looks for a product image on an approved retailer listing and redirects to it.
-- `/api/product-price?url=...` — reads structured product price metadata and returns the amount and currency when available.
+- `/api/product-image?url=...` — retrieves an image URL from an approved retailer product page and redirects to it.
+- `/api/product-price?url=...` — reads structured price metadata and returns amount and currency when available.
 - `/health` — health check.
 
-Supported retailer hosts: Amazon, Star Tech, ShopZ, Releva and Illin (including their www hostnames).
+Supported hosts: Amazon, Star Tech, ShopZ, Releva and Illin.
 
-## Notes
-
-- Retailers can block automated requests or omit structured price/image metadata. In those cases, the page shows an unavailable state; it does not invent prices or product photos.
-- Retailers control prices, stock, delivery, returns and fulfilment. Confirm details on the retailer's current listing before purchasing.
-- Affiliate links are disclosed on the website.
-- Node.js 20 or newer is required.
+Retailers may block automated requests or omit product metadata. In those cases the site shows an unavailable state instead of inventing a price or image. Confirm current product details with the retailer. Affiliate links are disclosed on the website. Node.js 20 or newer is required.
