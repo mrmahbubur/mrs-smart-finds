@@ -1,6 +1,6 @@
 # MRS Smart Finds
 
-A responsive affiliate product-discovery website with a Node.js backend for retailer image and price lookups.
+A responsive, multilingual affiliate product-discovery website with nine visual product-category browsers, product search and a Node.js backend for retailer image and price lookups.
 
 ## Render Web Service deployment
 
@@ -15,6 +15,14 @@ Connect this repository to Render and configure:
 - Instance: Free, if available in your Render account
 
 Render supplies `PORT`; the server listens on `0.0.0.0`.
+
+## Catalogue features
+
+- Nine visual categories: Audio, Beauty, Electronics, Fashion, Home & lifestyle, Lighting, Personal care, Photo & video, and Watches.
+- Category cards appear on the homepage and product-search page.
+- Selecting a homepage category opens the product-search page with that category preselected.
+- Responsive category thumbnails, product counts and category filtering.
+- Interface translations: English, Bengali, Hindi, Spanish and Arabic.
 
 ## API routes
 
